@@ -1,0 +1,56 @@
+{
+  "name": "@mlsapi/js",
+  "version": "1.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Official TypeScript & JavaScript Node.js SDK for mlsapi.dev - Real estate MLS data, property intelligence, and Studio generative AI",
+  "author": "mlsapi.dev",
+  "license": "MIT",
+  "keywords": [
+    "mls",
+    "real-estate",
+    "mlsapi",
+    "virtual-staging",
+    "generative-ai",
+    "proptech",
+    "floorplan-3d",
+    "twilight"
+  ],
+  "homepage": "https://mlsapi.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mlsapi/mlsapi-js.git"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "SPEC.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "npx tsx --test test/*.test.ts",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module"
+}
