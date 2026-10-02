@@ -1,8 +1,11 @@
 import type { HttpClient } from "../http.js";
 import { pollJob } from "../poller.js";
+import { isIngestJob } from "../types/listings.js";
 import type {
   BaseListing,
   IngestJob,
+  IngestJobRecord,
+  EnqueueIngestResponse,
   EnqueueListingOptions,
   ListJobsOptions,
 } from "../types/listings.js";
@@ -32,25 +35,31 @@ export class ListingsResource {
   ): Promise<BaseListing> {
     const initial = await this.get(mlsId, options);
 
-    // If already normalized listing (has specs/features)
-    if ("specifications" in initial && "photos" in initial) {
-      return initial as BaseListing;
+    // The server answers 200 with a normalized listing, or 202 with an ingest job
+    // ({ job_id, mls_id, status, step, status_url }) while scraping is in flight.
+    if (!isIngestJob(initial)) {
+      return initial;
     }
 
-    // Ingest job is in flight
-    const job = initial as IngestJob;
     await pollJob(
-      () => this.getJob(job.job_id),
+      async () => {
+        const record = await this.getJob(initial.job_id, options);
+        // /jobs/:id uses camelCase `id`; expose it as job_id for poller error messages.
+        return { ...record, job_id: record.id };
+      },
       options
     );
 
     // Fetch final completed listing
     const finalListing = await this.get(mlsId, options);
-    if ("specifications" in finalListing) {
-      return finalListing as BaseListing;
+    if (!isIngestJob(finalListing)) {
+      return finalListing;
     }
 
-    throw new Error(`Ingest completed but listing '${mlsId}' could not be normalized.`);
+    throw new Error(
+      `Ingest job '${initial.job_id}' completed but listing '${mlsId}' is still not available ` +
+        `(server returned job '${finalListing.job_id}').`
+    );
   }
 
   /**
@@ -60,8 +69,8 @@ export class ListingsResource {
     mlsId: string,
     options: EnqueueListingOptions = {},
     requestOptions?: RequestOptions
-  ): Promise<IngestJob> {
-    return this.http.post<IngestJob>(
+  ): Promise<EnqueueIngestResponse> {
+    return this.http.post<EnqueueIngestResponse>(
       "/jobs",
       { mlsId, ...options },
       requestOptions
@@ -74,8 +83,8 @@ export class ListingsResource {
   public async getJob(
     jobId: string,
     options?: RequestOptions
-  ): Promise<IngestJob> {
-    return this.http.get<IngestJob>(`/jobs/${encodeURIComponent(jobId)}`, options);
+  ): Promise<IngestJobRecord> {
+    return this.http.get<IngestJobRecord>(`/jobs/${encodeURIComponent(jobId)}`, options);
   }
 
   /**
@@ -84,8 +93,8 @@ export class ListingsResource {
   public async listJobs(
     options: ListJobsOptions = {},
     requestOptions?: RequestOptions
-  ): Promise<{ count: number; jobs: IngestJob[] }> {
+  ): Promise<{ count: number; jobs: IngestJobRecord[] }> {
     const query = options.limit ? `?limit=${options.limit}` : "";
-    return this.http.get<{ count: number; jobs: IngestJob[] }>(`/jobs${query}`, requestOptions);
+    return this.http.get<{ count: number; jobs: IngestJobRecord[] }>(`/jobs${query}`, requestOptions);
   }
 }

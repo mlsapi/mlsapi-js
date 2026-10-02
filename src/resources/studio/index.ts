@@ -11,7 +11,7 @@ import { StudioUploadResource } from "./upload.js";
 import type {
   CustomStudioRequest,
   CustomStudioResult,
-  StudioJob,
+  StudioJobSubmission,
   UploadResult,
   UploadOptions,
 } from "../../types/studio.js";
@@ -57,8 +57,8 @@ export class StudioResource {
   public async custom(
     request: CustomStudioRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<CustomStudioResult>> {
-    return this.http.post<StudioJob<CustomStudioResult>>(
+  ): Promise<StudioJobSubmission<CustomStudioResult>> {
+    return this.http.post<StudioJobSubmission<CustomStudioResult>>(
       "/v1/studio/custom",
       request,
       options

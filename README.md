@@ -101,7 +101,7 @@ import { MlsApiClient } from '@mlsapi/js';
 const mls = new MlsApiClient({
   apiKey: 'sk_live_...',              // Your secret API key
   environment: 'live',                // 'live' (production) or 'test' (sandbox playground)
-  baseUrl: 'https://api.mlsapi.dev',   // Optional custom endpoint or local mock
+  baseUrl: 'https://mlsapi.dev',   // Optional custom endpoint or local mock
   timeoutMs: 60_000,                  // Request timeout in milliseconds (default: 60s)
   maxRetries: 3,                      // Automatic retries on rate limits (429) & 5xx errors
 });
@@ -125,10 +125,11 @@ const listing = await mls.listings.getAndWait('A12079565', {
 console.log(listing.address.city, listing.specifications.beds, listing.specifications.baths_full);
 console.log(`Downloaded ${listing.photo_count} high-res photos:`, listing.photos);
 
-// Or handle the asynchronous job manually
+// Or handle the asynchronous job manually (HTTP 202 returns an ingest job)
+import { isIngestJob } from '@mlsapi/js';
 const response = await mls.listings.get('A12079565');
-if ('status' in response && response.status === 'processing') {
-  console.log(`Ingestion job queued: ${response.job_id}`);
+if (isIngestJob(response)) {
+  console.log(`Ingestion job ${response.status}: ${response.job_id}`);
 }
 ```
 
@@ -164,10 +165,12 @@ const copy = await mls.content.generate('A12079565', {
   target_audience: 'High-net-worth buyers relocating to South Florida',
 });
 
-console.log('Instagram Caption:\n', copy.social?.instagram?.caption);
-console.log('Instagram Hashtags:\n', copy.social?.instagram?.hashtags);
-console.log('TikTok/Reel Video Script:\n', copy.video_script?.script_text);
-console.log('MLS Public Remarks:\n', copy.mls_remarks?.optimized_text);
+// All generated copy is nested under `content`
+console.log('Instagram Caption:\n', copy.content.social?.instagram?.caption);
+console.log('Instagram Hashtags:\n', copy.content.social?.instagram?.hashtags);
+console.log('LinkedIn Post:\n', copy.content.social?.linkedin?.post_copy);
+console.log('TikTok/Reel Video Script:\n', copy.content.video_script?.scenes);
+console.log('MLS Public Remarks:\n', copy.content.mls_remarks);
 ```
 
 ---
@@ -371,7 +374,7 @@ const ads = await mls.studio.creatives.generateAndWait({
 });
 
 console.log('1:1 Square Feed Ad:', ads.creatives.square?.image_url);
-console.log('9:16 Vertical Story Ad:', ads.creatives.feed_portrait?.image_url);
+console.log('4:5 Portrait Feed Ad:', ads.creatives.feed_portrait?.image_url);
 console.log('Fair Housing compliance passed:', ads.compliance.fair_housing_passed);
 ```
 
@@ -393,6 +396,7 @@ const polishedVideo = await mls.studio.video.enhanceAndWait({
     font_theme: 'hormozi_bold',
     primary_color: '#FFFFFF',
     highlight_color: '#FFDE59',
+    safe_zone: 'instagram_reels',
   },
   export_aspect_ratios: ['9:16', '16:9'],
 });

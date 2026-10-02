@@ -7,7 +7,7 @@ import { MlsApiClient } from "../src/index.js";
 const apiKey = process.env.MLSAPI_KEY || "sk_live_demo";
 const mls = new MlsApiClient({
   apiKey,
-  baseUrl: process.env.MLSAPI_BASE_URL || "https://api.mlsapi.dev",
+  baseUrl: process.env.MLSAPI_BASE_URL || "https://mlsapi.dev",
 });
 
 async function main() {
@@ -15,7 +15,7 @@ async function main() {
   console.log(`✍️ Generating AI Marketing Copy for Listing: ${mlsId}...\n`);
 
   try {
-    const copy = await mls.content.generate(mlsId, {
+    const { content: copy } = await mls.content.generate(mlsId, {
       outputs: [
         "social",
         "email_blast",
@@ -41,22 +41,18 @@ async function main() {
     console.log("💼 LINKEDIN MARKET BREAKDOWN");
     console.log("--------------------------------------------------");
     if (copy.social?.linkedin) {
-      console.log(`Headline: ${copy.social.linkedin.headline}\n`);
-      console.log(`Body:\n${copy.social.linkedin.body}\n`);
-      console.log(`Key Takeaway: ${copy.social.linkedin.takeaway}\n`);
+      console.log(`${copy.social.linkedin.post_copy}\n`);
+      console.log(`Hashtags: ${copy.social.linkedin.hashtags.join(" ")}\n`);
     }
 
     console.log("==================================================");
     console.log("🎬 TIKTOK / REELS VIDEO SCRIPT");
     console.log("--------------------------------------------------");
     if (copy.video_script) {
-      console.log(`Duration: ${copy.video_script.total_duration_seconds}s | Hook: "${copy.video_script.hook}"\n`);
+      console.log(`Duration: ${copy.video_script.duration_seconds}s | Hook: "${copy.video_script.hook}"\n`);
       for (const scene of copy.video_script.scenes) {
-        console.log(`[${scene.timestamp_seconds}] 📹 Shot: ${scene.shot_description}`);
-        console.log(`             🎙️ Voice: "${scene.spoken_audio}"`);
-        if (scene.on_screen_text) {
-          console.log(`             💬 Text Overlay: "${scene.on_screen_text}"`);
-        }
+        console.log(`[${scene.second_range}] 📹 Shot: ${scene.visual}`);
+        console.log(`             🎙️ Voice: "${scene.voiceover}"`);
       }
     }
 
@@ -64,8 +60,8 @@ async function main() {
     console.log("📋 MLS PUBLIC REMARKS");
     console.log("--------------------------------------------------");
     if (copy.mls_remarks) {
-      console.log(copy.mls_remarks.optimized_text);
-      console.log(`\n(Length: ${copy.mls_remarks.character_count}/${copy.mls_remarks.character_limit} characters)`);
+      console.log(copy.mls_remarks);
+      console.log(`\n(Length: ${copy.mls_remarks.length} characters)`);
     }
   } catch (error: any) {
     console.error("❌ Content generation error:", error.message);

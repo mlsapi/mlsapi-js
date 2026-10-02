@@ -103,7 +103,7 @@ import { MlsApiClient } from 'mlsapi';
 const mls = new MlsApiClient({
   apiKey: process.env.MLSAPI_KEY,      // Required (or via MLSAPI_KEY env)
   environment: 'live',                // 'live' | 'test' (default: 'live')
-  baseUrl: 'https://api.mlsapi.dev',   // Optional custom base URL
+  baseUrl: 'https://mlsapi.dev',   // Optional custom base URL
   timeoutMs: 60_000,                  // Request timeout (default: 60s)
   maxRetries: 3,                      // Automatic retries on 429/5xx (default: 3)
 });
@@ -184,9 +184,9 @@ mls
   Retrieves normalized listing data. If the listing is newly encountered, the backend enqueues an ingestion job and returns HTTP `202 Accepted` with an `IngestJob`.
 - `mls.listings.getAndWait(mlsId: string, options?: WaitOptions): Promise<BaseListing>`
   Automatically polls until ingestion completes, then returns the resolved `BaseListing`.
-- `mls.listings.enqueue(mlsId: string, options?: EnqueueOptions): Promise<IngestJob>`
+- `mls.listings.enqueue(mlsId: string, options?: EnqueueOptions): Promise<EnqueueIngestResponse>`
   Explicitly triggers background MLS scraping and photo ingestion.
-- `mls.listings.getJob(jobId: string): Promise<IngestJob>`
+- `mls.listings.getJob(jobId: string): Promise<IngestJobRecord>`
   Retrieves status and progress percentage of an ingestion job.
 
 ---

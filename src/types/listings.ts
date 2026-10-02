@@ -70,21 +70,84 @@ export interface BaseListing {
   meta: ListingMetadata;
 }
 
+/**
+ * HTTP 202 body from `GET /v1/listing/:mlsId` while the listing is being ingested.
+ * Distinguish it from a {@link BaseListing} with {@link isIngestJob}.
+ */
 export interface IngestJob {
   job_id: string;
   mls_id: string;
   status: "queued" | "processing" | "completed" | "failed";
   step?: string;
   estimated_completion_seconds?: number;
+  /** Path of the ingestion job, e.g. `/jobs/job_...`. */
   status_url?: string;
+  /** @deprecated Not part of the 202 body; see {@link IngestJobRecord.result}. */
   result?: {
     propertyDetails?: Record<string, unknown>[];
     photosIngested?: number;
     downloadedFiles?: string[];
   };
+  /** @deprecated Not part of the 202 body; see {@link IngestJobRecord.error}. */
   error?: string;
+  /** @deprecated Not part of the 202 body; see {@link IngestJobRecord.createdAt}. */
   created_at?: string;
+  /** @deprecated Not part of the 202 body; see {@link IngestJobRecord.completedAt}. */
   completed_at?: string;
+}
+
+export type IngestJobStep = "queued" | "serpapi" | "apify" | "photos" | "r2" | "done" | "error";
+
+/** Full ingestion job record from `GET /jobs/:jobId` and `GET /jobs` (camelCase keys). */
+export interface IngestJobRecord {
+  id: string;
+  mlsId: string;
+  status: "queued" | "processing" | "completed" | "failed";
+  step: IngestJobStep;
+  progress: {
+    message: string;
+    photosCompleted?: number;
+    photosTotal?: number;
+  };
+  options: EnqueueListingOptions;
+  result?: {
+    mlsId: string;
+    address: string;
+    zillowUrl: string;
+    detailsR2Key?: string;
+    detailsR2Url?: string;
+    photosCount: number;
+    photos: Array<Record<string, unknown>>;
+    propertyDetails: Record<string, unknown>[];
+  };
+  error?: string;
+  createdAt: string;
+  startedAt?: string;
+  completedAt?: string;
+}
+
+/** HTTP 202 body from `POST /jobs` (camelCase keys). */
+export interface EnqueueIngestResponse {
+  jobId: string;
+  mlsId: string;
+  status: "queued" | "processing" | "completed" | "failed";
+  step: IngestJobStep;
+  statusUrl: string;
+  lookupUrl: string;
+  createdAt: string;
+}
+
+/**
+ * True when a `listings.get()` response is an in-flight ingestion job (HTTP 202)
+ * rather than a normalized listing.
+ */
+export function isIngestJob(value: BaseListing | IngestJob): value is IngestJob {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as IngestJob).job_id === "string" &&
+    !("specifications" in value)
+  );
 }
 
 export interface EnqueueListingOptions {

@@ -5,7 +5,7 @@ import type {
   FloorPlanAnalysisResponse,
   Render3dRequest,
   Render3dResult,
-  StudioJob,
+  StudioJobSubmission,
 } from "../../types/studio.js";
 import type { PollingOptions, RequestOptions } from "../../types/common.js";
 
@@ -35,8 +35,8 @@ export class StudioFloorPlanResource {
   public async render3d(
     request: Render3dRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<Render3dResult>> {
-    return this.http.post<StudioJob<Render3dResult>>(
+  ): Promise<StudioJobSubmission<Render3dResult>> {
+    return this.http.post<StudioJobSubmission<Render3dResult>>(
       "/v1/studio/floorplan/render-3d",
       request,
       options

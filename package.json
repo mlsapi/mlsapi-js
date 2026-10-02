@@ -1,6 +1,6 @@
 {
   "name": "@mlsapi/js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publishConfig": {
     "access": "public"
   },
@@ -36,14 +36,16 @@
     "dist",
     "README.md",
     "LICENSE",
-    "SPEC.md"
+    "SPEC.md",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json",
     "test": "npx tsx --test test/*.test.ts",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "typecheck:tests": "tsc -p tsconfig.test.json"
   },
   "devDependencies": {
     "@types/node": "^22.13.0",

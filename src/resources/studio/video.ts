@@ -9,7 +9,7 @@ import type {
   VideoTransitionResult,
   HouseTourVideoRequest,
   HouseTourVideoResult,
-  StudioJob,
+  StudioJobSubmission,
 } from "../../types/studio.js";
 import type { PollingOptions, RequestOptions } from "../../types/common.js";
 
@@ -22,8 +22,8 @@ export class StudioVideoResource {
   public async enhance(
     request: VideoEnhanceRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<VideoEnhanceResult>> {
-    return this.http.post<StudioJob<VideoEnhanceResult>>(
+  ): Promise<StudioJobSubmission<VideoEnhanceResult>> {
+    return this.http.post<StudioJobSubmission<VideoEnhanceResult>>(
       "/v1/studio/video/enhance",
       request,
       options
@@ -42,8 +42,8 @@ export class StudioVideoResource {
   public async walkthrough(
     request: VideoWalkthroughRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<VideoWalkthroughResult>> {
-    return this.http.post<StudioJob<VideoWalkthroughResult>>(
+  ): Promise<StudioJobSubmission<VideoWalkthroughResult>> {
+    return this.http.post<StudioJobSubmission<VideoWalkthroughResult>>(
       "/v1/studio/video/walkthrough",
       request,
       options
@@ -62,8 +62,8 @@ export class StudioVideoResource {
   public async transition(
     request: VideoTransitionRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<VideoTransitionResult>> {
-    return this.http.post<StudioJob<VideoTransitionResult>>(
+  ): Promise<StudioJobSubmission<VideoTransitionResult>> {
+    return this.http.post<StudioJobSubmission<VideoTransitionResult>>(
       "/v1/studio/video/transition",
       request,
       options
@@ -82,8 +82,8 @@ export class StudioVideoResource {
   public async tour(
     request: HouseTourVideoRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<HouseTourVideoResult>> {
-    return this.http.post<StudioJob<HouseTourVideoResult>>(
+  ): Promise<StudioJobSubmission<HouseTourVideoResult>> {
+    return this.http.post<StudioJobSubmission<HouseTourVideoResult>>(
       "/v1/studio/video/tour",
       request,
       options

@@ -5,7 +5,7 @@ import type {
   ExteriorEnhanceResult,
   UpscaleRequest,
   UpscaleResult,
-  StudioJob,
+  StudioJobSubmission,
 } from "../../types/studio.js";
 import type { PollingOptions, RequestOptions } from "../../types/common.js";
 
@@ -18,8 +18,8 @@ export class StudioEnhanceResource {
   public async exterior(
     request: ExteriorEnhanceRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<ExteriorEnhanceResult>> {
-    return this.http.post<StudioJob<ExteriorEnhanceResult>>(
+  ): Promise<StudioJobSubmission<ExteriorEnhanceResult>> {
+    return this.http.post<StudioJobSubmission<ExteriorEnhanceResult>>(
       "/v1/studio/enhance/exterior",
       request,
       options
@@ -38,8 +38,8 @@ export class StudioEnhanceResource {
   public async upscale(
     request: UpscaleRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<UpscaleResult>> {
-    return this.http.post<StudioJob<UpscaleResult>>(
+  ): Promise<StudioJobSubmission<UpscaleResult>> {
+    return this.http.post<StudioJobSubmission<UpscaleResult>>(
       "/v1/studio/enhance/upscale",
       request,
       options

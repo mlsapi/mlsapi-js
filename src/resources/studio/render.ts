@@ -3,7 +3,7 @@ import type { StudioJobsResource } from "./jobs.js";
 import type {
   ArchitecturalRenderRequest,
   ArchitecturalRenderResult,
-  StudioJob,
+  StudioJobSubmission,
 } from "../../types/studio.js";
 import type { PollingOptions, RequestOptions } from "../../types/common.js";
 
@@ -16,8 +16,8 @@ export class StudioRenderResource {
   public async architectural(
     request: ArchitecturalRenderRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<ArchitecturalRenderResult>> {
-    return this.http.post<StudioJob<ArchitecturalRenderResult>>(
+  ): Promise<StudioJobSubmission<ArchitecturalRenderResult>> {
+    return this.http.post<StudioJobSubmission<ArchitecturalRenderResult>>(
       "/v1/studio/render/architectural",
       request,
       options

@@ -14,7 +14,7 @@ export interface MlsApiClientOptions {
   environment?: Environment;
 
   /**
-   * Base URL of the MLS API. Defaults to https://api.mlsapi.dev.
+   * Base URL of the MLS API. Defaults to https://mlsapi.dev.
    */
   baseUrl?: string;
 

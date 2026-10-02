@@ -7,7 +7,7 @@ import { MlsApiClient } from "../src/index.js";
 const apiKey = process.env.MLSAPI_KEY || "sk_live_demo";
 const mls = new MlsApiClient({
   apiKey,
-  baseUrl: process.env.MLSAPI_BASE_URL || "https://api.mlsapi.dev",
+  baseUrl: process.env.MLSAPI_BASE_URL || "https://mlsapi.dev",
 });
 
 async function main() {

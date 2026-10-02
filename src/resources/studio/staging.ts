@@ -17,7 +17,7 @@ import type {
   ReplaceMaterialResult,
   WallColorsRequest,
   WallColorsResult,
-  StudioJob,
+  StudioJobSubmission,
 } from "../../types/studio.js";
 import type { PollingOptions, RequestOptions } from "../../types/common.js";
 
@@ -31,8 +31,8 @@ export class StudioStagingResource {
   public async stage(
     request: StagingFurnishRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<StagingFurnishResult>> {
-    return this.http.post<StudioJob<StagingFurnishResult>>(
+  ): Promise<StudioJobSubmission<StagingFurnishResult>> {
+    return this.http.post<StudioJobSubmission<StagingFurnishResult>>(
       "/v1/studio/staging/stage",
       request,
       options
@@ -51,7 +51,7 @@ export class StudioStagingResource {
   public async furnish(
     request: StagingFurnishRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<StagingFurnishResult>> {
+  ): Promise<StudioJobSubmission<StagingFurnishResult>> {
     return this.stage(request, options);
   }
 
@@ -66,8 +66,8 @@ export class StudioStagingResource {
   public async declutter(
     request: DeclutterRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<DeclutterResult>> {
-    return this.http.post<StudioJob<DeclutterResult>>(
+  ): Promise<StudioJobSubmission<DeclutterResult>> {
+    return this.http.post<StudioJobSubmission<DeclutterResult>>(
       "/v1/studio/staging/declutter",
       request,
       options
@@ -87,8 +87,8 @@ export class StudioStagingResource {
   public async twilight(
     request: TwilightRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<TwilightResult>> {
-    return this.http.post<StudioJob<TwilightResult>>(
+  ): Promise<StudioJobSubmission<TwilightResult>> {
+    return this.http.post<StudioJobSubmission<TwilightResult>>(
       "/v1/studio/staging/twilight",
       request,
       options
@@ -108,8 +108,8 @@ export class StudioStagingResource {
   public async empty(
     request: DeStageEmptyRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<DeStageEmptyResult>> {
-    return this.http.post<StudioJob<DeStageEmptyResult>>(
+  ): Promise<StudioJobSubmission<DeStageEmptyResult>> {
+    return this.http.post<StudioJobSubmission<DeStageEmptyResult>>(
       "/v1/studio/staging/empty",
       request,
       options
@@ -129,8 +129,8 @@ export class StudioStagingResource {
   public async restyle(
     request: RestyleRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<RestyleResult>> {
-    return this.http.post<StudioJob<RestyleResult>>(
+  ): Promise<StudioJobSubmission<RestyleResult>> {
+    return this.http.post<StudioJobSubmission<RestyleResult>>(
       "/v1/studio/staging/restyle",
       request,
       options
@@ -150,8 +150,8 @@ export class StudioStagingResource {
   public async replaceFurniture(
     request: ReplaceFurnitureRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<ReplaceFurnitureResult>> {
-    return this.http.post<StudioJob<ReplaceFurnitureResult>>(
+  ): Promise<StudioJobSubmission<ReplaceFurnitureResult>> {
+    return this.http.post<StudioJobSubmission<ReplaceFurnitureResult>>(
       "/v1/studio/staging/replace-furniture",
       request,
       options
@@ -171,8 +171,8 @@ export class StudioStagingResource {
   public async replaceMaterial(
     request: ReplaceMaterialRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<ReplaceMaterialResult>> {
-    return this.http.post<StudioJob<ReplaceMaterialResult>>(
+  ): Promise<StudioJobSubmission<ReplaceMaterialResult>> {
+    return this.http.post<StudioJobSubmission<ReplaceMaterialResult>>(
       "/v1/studio/staging/replace-material",
       request,
       options
@@ -192,8 +192,8 @@ export class StudioStagingResource {
   public async wallColors(
     request: WallColorsRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<WallColorsResult>> {
-    return this.http.post<StudioJob<WallColorsResult>>(
+  ): Promise<StudioJobSubmission<WallColorsResult>> {
+    return this.http.post<StudioJobSubmission<WallColorsResult>>(
       "/v1/studio/staging/wall-colors",
       request,
       options

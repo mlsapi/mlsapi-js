@@ -3,7 +3,7 @@ import type { StudioJobsResource } from "./jobs.js";
 import type {
   AdCreativesRequest,
   AdCreativesResult,
-  StudioJob,
+  StudioJobSubmission,
 } from "../../types/studio.js";
 import type { PollingOptions, RequestOptions } from "../../types/common.js";
 
@@ -16,8 +16,8 @@ export class StudioCreativesResource {
   public async generate(
     request: AdCreativesRequest,
     options?: RequestOptions
-  ): Promise<StudioJob<AdCreativesResult>> {
-    return this.http.post<StudioJob<AdCreativesResult>>(
+  ): Promise<StudioJobSubmission<AdCreativesResult>> {
+    return this.http.post<StudioJobSubmission<AdCreativesResult>>(
       "/v1/studio/creatives/generate",
       request,
       options
